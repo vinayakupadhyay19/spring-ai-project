@@ -21,6 +21,9 @@ public class HelloController {
 		return chatClient
 				.prompt(message)
 				.call()
-				.content();
+				.chatResponse()
+				.getResult()
+				.getOutput()
+				.getText();
 	}
 }
