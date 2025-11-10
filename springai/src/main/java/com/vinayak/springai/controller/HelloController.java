@@ -1,8 +1,11 @@
 package com.vinayak.springai.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +58,32 @@ public class HelloController {
 				.getResult()
 				.getOutput()
 				.getText();
+		
+	}
+	
+	@GetMapping("/sports")
+	public String getSportsDetails(@RequestParam String name) {
+		String message = "List the details of the Sports %s "
+				+ "along with their Rules and Regulations."
+				+ "Show the details in readable format";
+		String systemMessages = "You are a smart Virtual Assistance"
+				+ "Your taks is to give the details about the Sports."
+				+ "If someone ask about something else and you don't know the answer ,"
+				+ "Just say that you do not know the answer.";
+		
+		UserMessage userMesages = new UserMessage(String.format(message,name));
+		
+		SystemMessage systemMessage = new SystemMessage(systemMessages);
+		
+		Prompt propmt = new Prompt(List.of(userMesages,systemMessage)); 
+		
+		return chatClient
+					.prompt(propmt)
+					.call()
+					.chatResponse()
+					.getResult()
+					.getOutput()
+					.getText();
 		
 	}
 	
